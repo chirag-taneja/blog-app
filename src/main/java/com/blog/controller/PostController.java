@@ -22,9 +22,9 @@ public class PostController {
     }
 
     @GetMapping("/posts")
-    public List<Post> getAllPost()
+    public List<PostDto> getAllPost()
     {
-        List<Post> allPost = postService.getAllPost();
+        List<PostDto> allPost = postService.getAllPost();
 
         if (allPost.isEmpty()|| allPost==null)
         {
@@ -48,9 +48,9 @@ public class PostController {
         return allPost;
     }
     @GetMapping("/post/{postId}")
-    public Post getPostById(@PathVariable long postId)
+    public PostDto getPostById(@PathVariable long postId)
     {
-        Post postById = postService.getPostById(postId);
+        PostDto postById = postService.getPostById(postId);
 
 
         if (postById==null)
@@ -64,7 +64,6 @@ public class PostController {
     public String deleteById(@PathVariable long postId)
     {
         postService.deleteById(postId);
-
         return "Delete Successfully";
     }
 

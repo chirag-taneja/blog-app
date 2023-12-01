@@ -14,7 +14,6 @@ public class BlogAppApplication {
 		return new ModelMapper();
 
 	}
-
 	public static void main(String[] args) {
 		SpringApplication.run(BlogAppApplication.class, args);
 	}

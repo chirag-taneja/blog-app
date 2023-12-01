@@ -14,6 +14,7 @@ import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 import org.springframework.ui.ModelMap;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Set;
 import java.util.stream.Collectors;
@@ -36,18 +37,25 @@ public class PostService {
         this.commentService =commentService;
     }
 
-    public List<Post> getAllPost() {
-        return postRepo.findAll();
+    public List<PostDto> getAllPost() {
+        List<Post> post = postRepo.findAll();
+        List<PostDto> postDtoList=new ArrayList<>();
+        for (int i=0;i<post.size();i++)
+        {
+            PostDto postDto = mapPostToPostDto(post.get(i));
+            postDtoList.add(postDto);
+        }
+        return postDtoList;
     }
 
-    public Post getPostById(long postId) {
+    public PostDto getPostById(long postId) {
 
         List<CommentDto> allCommentsByPostId = commentService.getAllCommentsByPostId(postId);
-
         Set<CommentDto> collect = allCommentsByPostId.stream().map(i -> i).collect(Collectors.toSet());
-        Post post = postRepo.findById(postId).get();
 
-        return post;
+        Post post = postRepo.findById(postId).get();
+        PostDto postDto = mapPostToPostDto(post);
+        return postDto;
     }
 
     public void deleteById(long postId) {
@@ -83,5 +91,13 @@ public class PostService {
         Pageable pageable= PageRequest.of(pageNo,pageSize, Sort.by(sortBy));
         return postRepo.findAll(pageable).getContent();
 
+    }
+
+
+    private PostDto mapPostToPostDto(Post post)
+    {
+        List<CommentDto> allCommentsByPostId = commentService.getAllCommentsByPostId(post.getPostId());
+        Set<CommentDto> collect = allCommentsByPostId.stream().map(i -> i).collect(Collectors.toSet());
+        return new PostDto(post.getPostId(),post.getTitle(),post.getDescription(),post.getDescription(),collect);
     }
 }
