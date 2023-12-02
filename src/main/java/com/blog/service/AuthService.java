@@ -62,7 +62,7 @@ public class AuthService {
             throw new RuntimeException("User Already Present with this UserName");
         }
 
-        User user= User.builder().userName(signUpDto.userName()).name(signUpDto.name()).password(passwordEncoder.encode(signUpDto.password())).email(signUpDto.email()).build();
+              User user= User.builder().userName(signUpDto.userName()).name(signUpDto.name()).password(passwordEncoder.encode(signUpDto.password())).email(signUpDto.email()).build();
         Role role=roleRepo.findByName("user").get();
 
         user.setRoles(Set.of(role));
